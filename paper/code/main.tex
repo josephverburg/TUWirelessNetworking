@@ -1,0 +1,69 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{siunitx}
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Review of "Wi-Fi Goes to Town: Rapid Picocell Switching for Wireless Transit Networks"}
+\author{
+Joseph Verburg (4018575, j.p.verburg@student.tudelft.nl)
+}
+\date{April 2018}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+In this review we will be discussing the paper "Wi-Fi Goes to Town: Rapid Picocell Switching for Wireless Transit Networks" \cite{Song:2017:WGT:3098822.3098846}. An technique to deliver stable and high performance wifi connections to users moving at high speeds (for example in cars).
+
+\section{Summary}
+The paper introduces a new technique abbreviated as WGTT.
+The purpose of this technique is to improve the throughput of fastly moving Wifi users by utilizing multiple Wifi AP's controlled by a central controller all connected using an Ethernet network.
+WGTT consists of 3 parts. An dynamic Wifi AP switching system for sending data, smart data receiving system where multiple receivers are combined to reliably receive data and smartly send ACK's back and lastly central management of client associations by the controller.\\
+
+The first part is that all AP's forward the CSI of every frame they receive to the controller. The controller uses this information to calculate the ESNR. This information is then used to decide which AP should send information to the client, this is done every \SI{}{\milli\second} using the known ESNR's of the last \SI{10}{\milli\second}. When a switch is necessary the controller communicates this with the old AP which then handovers the current state to the new AP. Because all the AP's behave as the same BSSID, the client does not need to be involved in the handover. This allows very quick handovers and thus sustained speed. \\
+
+The second part is that all AP's forward the received frames to the controller which then de-duplicates these and forwards them to the internet. Furthermore it optimizes the ACK's into Block ACK's making sending ACK's back more efficient.\\
+
+The third part is that whenever a client associates with an AP the AP forwards this information to the controller which then sends this information to all AP's to avoid the need for more associations.\\
+
+This setup performs considerably better then existing standardized solutions like 802.11r. Performance gains between 2x-4x are measured.
+
+\section{Assessment}
+The paper proposes an interesting technique using proper testing and evaluation using many different situations. 
+Furthermore it also compares itself to different other solutions in a well done manner. 
+The structure of the paper is also well done and clear to read. 
+However a link to code of the paper solution is sadly missing making it non trivial to reproduce and verify the results. 
+Also there is no comparison in device resource utilization which would could add extra perspective to how heavy or not the proposed technique is on resources.
+
+\section{Potential improvement(s)}
+While the paper proposes and interesting technique it only tests it using an single setup.
+Following possible improvements could be explored:
+\begin{itemize}
+    \item Compare device resource utilization for the different systems. \\
+    This could give some insight in how expensive large setups of certain techniques could be.
+    \item Compare performance in low client movement speed situations.\\
+    Since the setup could very quickly move clients it could also perform well there.
+    \item Explore cheaper hardware options.\\
+    The paper proposed that the setup could also work with cheaper hardware, allowing for cheap reliable Wifi deployments. This could be explored and determine if it works as reliably and performs as quickly as the current research.
+    \item Research Cluster setups for large city wide networks.\\
+    The paper only explores a single controller with 8 AP's. It would be interesting to see if this system could be adapted to work with multiple - fail over - controllers in large systems with large number of AP's. For example to cover entire city's.
+\end{itemize}
+
+\bibliographystyle{alpha}
+\bibliography{bib}
+
+
+\end{document}
